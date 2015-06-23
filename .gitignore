@@ -1,0 +1,6 @@
+.idea/
+*secret.conf
+target
+core/target
+bundle/target
+*.DS_Store
