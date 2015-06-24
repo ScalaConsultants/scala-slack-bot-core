@@ -10,7 +10,7 @@ import spray.json._
 import scala.util.{Failure, Success}
 
 /**
- * Created on 21.01.15 20:32
+ *  marioosh
  */
 class ApiActor extends Actor with ActorLogging {
 
@@ -27,7 +27,7 @@ class ApiActor extends Actor with ActorLogging {
       SlackApiClient.get[ApiTestResponse]("api.test", params) onComplete {
         case Success(res) =>
           if (res.ok) {
-            send ! Ok(res.args)
+            send ! Connected
           }
           else {
             send ! ApiTestError
