@@ -3,7 +3,7 @@ package io.scalac.slack.api
 import akka.actor.{Actor, ActorLogging}
 import io.scalac.slack.api.ResponseObject._
 import io.scalac.slack.common.JsonProtocols._
-import io.scalac.slack.common.{Attachment, RichOutboundMessage}
+import io.scalac.slack.common.RichOutboundMessage
 import io.scalac.slack.{ApiTestError, Config, SlackError}
 import spray.json._
 
@@ -19,7 +19,7 @@ class ApiActor extends Actor with ActorLogging {
     case ApiTest(param, error) =>
       log.debug("api.test requested")
       val send = sender()
-      val params = Map("param" -> param, "error" -> error).collect { case (key, Some(value)) => key -> value}
+      val params = Map("param" -> param, "error" -> error).collect { case (key, Some(value)) => key -> value }
 
       SlackApiClient.get[ApiTestResponse]("api.test", params) onComplete {
         case Success(res) =>
@@ -56,9 +56,11 @@ class ApiActor extends Actor with ActorLogging {
       SlackApiClient.get[RtmStartResponse]("rtm.start", Map("token" -> token.key)) onComplete {
 
         case Success(res) =>
-          if (res.ok)
+          if (res.ok) {
             send ! RtmData(res.url)
-          send ! res.self
+            send ! res.self
+            send ! res
+          }
         case Failure(ex) =>
           send ! ex
       }
