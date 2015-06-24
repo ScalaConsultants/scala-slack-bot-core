@@ -1,8 +1,7 @@
 package io.scalac.slack.api
 
 /**
- * Created on 20.01.15 23:59
- * Messages sends between actors
+ * Messages sended between actors
  */
 sealed trait Message
 

@@ -1,7 +1,7 @@
 package io.scalac.slack
 
 import io.scalac.slack.api.{ApiTestResponse, AuthTestResponse, RtmStartResponse}
-import io.scalac.slack.models.{Away, Channel, ChannelInfo, SlackUser}
+import io.scalac.slack.models._
 import org.joda.time.DateTime
 import org.scalatest.{FunSuite, Matchers}
 import spray.json._
@@ -699,4 +699,23 @@ class UnmarshallerTest extends FunSuite with Matchers {
     user.hasFiles should equal(Some(false))
     user.presence should equal(Away)
   }
+
+  test("IM object") {
+    /*language=JSON*/
+    val imString = """{
+                     |    "last_read": "0000000000.000000",
+                     |    "is_open": true,
+                     |    "id": "D03DQKG1C",
+                     |    "unread_count": 0,
+                     |    "is_im": true,
+                     |    "latest": null,
+                     |    "user": "U03DN1GTQ",
+                     |    "created": 1421786647
+                     |  }""".stripMargin
+
+    val im = imString.parseJson.convertTo[DirectChannel]
+    im.id should equal("D03DQKG1C")
+    im.userId should equal("U03DN1GTQ")
+  }
+
 }

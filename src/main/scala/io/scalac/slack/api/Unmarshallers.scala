@@ -4,9 +4,6 @@ import io.scalac.slack.models._
 import org.joda.time.DateTime
 import spray.json._
 
-/**
- * Created on 28.01.15 23:06
- */
 object Unmarshallers extends DefaultJsonProtocol {
 
   implicit object DateTimeJsonFormat extends JsonFormat[DateTime] {
@@ -52,4 +49,6 @@ object Unmarshallers extends DefaultJsonProtocol {
   implicit val botInfoFormat = jsonFormat(BotInfo, "id", "name")
   implicit val rtmStartResponseFormat = jsonFormat(RtmStartResponse, "ok", "url", "users", "channels", "self")
   implicit val chatPostMessageResponse = jsonFormat(ChatPostMessageResponse, "ok", "channel", "error")
+  implicit val imFormat = jsonFormat(DirectChannel, "id", "user")
+
 }

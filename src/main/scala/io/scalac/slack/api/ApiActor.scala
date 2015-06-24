@@ -9,9 +9,6 @@ import spray.json._
 
 import scala.util.{Failure, Success}
 
-/**
- *  marioosh
- */
 class ApiActor extends Actor with ActorLogging {
 
   import context.dispatcher
