@@ -546,6 +546,7 @@ class UnmarshallerTest extends FunSuite with Matchers {
     rtmResponse.channels.size should equal(2)
     rtmResponse.self.id should equal("U03DQKG14")
     rtmResponse.self.name should equal("secretary")
+    rtmResponse.ims.size should equal(5)
   }
 
   test("long channel unmarshall") {
