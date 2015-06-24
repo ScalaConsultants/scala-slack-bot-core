@@ -31,3 +31,5 @@ libraryDependencies ++= {
 resolvers += "spray repo" at "http://repo.spray.io"
 
 publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
+
+publishArtifact in (Compile, packageDoc) := false
