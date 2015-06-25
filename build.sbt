@@ -34,4 +34,29 @@ libraryDependencies ++= {
 
 resolvers += "spray repo" at "http://repo.spray.io"
 
-publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
+publishMavenStyle := true
+
+publishTo := Some(Resolver.file("file",  new File("../mvn-repo")))
+
+publishArtifact in Test := false
+
+pomExtra := (
+  <url>http://www.scalac.io/</url>
+    <licenses>
+      <license>
+        <name>MIT</name>
+        <url>http://opensource.org/licenses/MIT</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+    <scm>
+      <url>git@github.com:ScalaConsultants/scala-slack-bot-core.git</url>
+      <connection>scm:git:git@github.com:ScalaConsultants/scala-slack-bot-core</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>scalac</id>
+        <name>ScalaConsultants</name>
+      </developer>
+    </developers>)
+
