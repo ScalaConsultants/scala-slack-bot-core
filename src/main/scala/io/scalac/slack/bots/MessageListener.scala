@@ -2,22 +2,18 @@ package io.scalac.slack.bots
 
 import akka.actor.{Actor, ActorLogging}
 import io.scalac.slack.MessageEventBus
-import io.scalac.slack.common.{Incoming, MessageEvent, Outgoing, RichOutboundMessage, _}
+import io.scalac.slack.common.{Incoming, MessageEvent, Outgoing, _}
 
-/**
- * Created on 08.02.15 23:52
- */
+import scala.language.implicitConversions
+
 trait MessagePublisher {
-//  def bus = SlackBot.eventBus
 
   def bus: MessageEventBus
 
-  def publish(event: MessageEvent) = {
+  implicit def publish(event: MessageEvent): Unit = {
     bus.publish(event)
   }
-  def publish(event: RichOutboundMessage) = {
-    bus.publish(event)
-  }
+
 }
 
 abstract class MessageListener extends Actor with ActorLogging with MessagePublisher
