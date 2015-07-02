@@ -1,17 +1,14 @@
 package io.scalac.slack.api
 
-import io.scalac.slack.models.{Channel, SlackUser}
+import io.scalac.slack.models.{Channel, DirectChannel, SlackUser}
 
-/**
- * Created on 21.01.15 22:28
- */
 sealed trait ResponseObject
 
 case class ApiTestResponse(ok: Boolean, error: Option[String], args: Option[Map[String, String]]) extends ResponseObject
 
 case class AuthTestResponse(ok: Boolean, error: Option[String], url: Option[String], team: Option[String], user: Option[String], team_id: Option[String], user_id: Option[String]) extends ResponseObject
 
-case class RtmStartResponse(ok: Boolean, url: String, users: List[SlackUser], channels: List[Channel], self: BotInfo) extends ResponseObject
+case class RtmStartResponse(ok: Boolean, url: String, users: List[SlackUser], channels: List[Channel], self: BotInfo, ims: List[DirectChannel]) extends ResponseObject
 
 object ResponseObject {
   implicit def authTestResponseToAuthData(atr: AuthTestResponse): AuthData =
