@@ -1,8 +1,11 @@
 package io.scalac.slack.common
 
-import org.joda.time.DateTime
+import akka.actor.ActorRef
+import akka.pattern._
+import akka.util.Timeout
 
 import scala.annotation.tailrec
+import scala.concurrent.ExecutionContext
 
 /**
  * Created on 08.02.15 22:04
@@ -54,11 +57,11 @@ case object Ping extends OutgoingMessage {
 case class OutboundMessage(channel: String, text: String) extends OutgoingMessage {
   override def toJson =
     s"""{
-      |"id": ${MessageCounter.next},
-      |"type": "message",
-      |"channel": "$channel",
-      |"text": "$text"
-      |}""".stripMargin
+       |"id": ${MessageCounter.next},
+                                      |"type": "message",
+                                      |"channel": "$channel",
+                                                             |"text": "$text"
+                                                                              |}""".stripMargin
 }
 
 sealed trait RichMessageElement
@@ -136,3 +139,20 @@ object Outgoing extends MessageEventType
  * it's needed because of their similiarity
  */
 case class MessageType(messageType: String, subType: Option[String])
+
+/**
+ * Direct message is message send by the private channel
+ * userStorage try to find channel ID and if will
+ * message is translated into basic message and send to this channel.
+ */
+object DirectMessage extends {
+
+  def apply(key: String, message: String)(implicit context: ExecutionContext, userStorage: ActorRef, timeout: Timeout, forward: (OutboundMessage) => Unit): Unit = {
+
+    userStorage ? FindChannel(key) onSuccess {
+      case Some(channel: String) =>
+        forward(OutboundMessage(channel, message))
+    }
+
+  }
+}
