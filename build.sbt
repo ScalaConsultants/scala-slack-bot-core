@@ -1,8 +1,8 @@
 name := "slack-scala-bot-core"
 
-version := "0.1"
+version := "0.2.1"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 organization := "io.scalac"
 
@@ -23,10 +23,6 @@ libraryDependencies ++= {
     "log4j" % "log4j" % "1.2.17",
     "org.slf4j" % "slf4j-api" % "1.7.5",
     "org.slf4j" % "slf4j-log4j12" % "1.7.5",
-    "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
-    "org.scala-lang" % "scala-compiler" % "2.10.2",
-    "org.scala-lang" % "jline" % "2.10.2",
-    "org.twitter4j" % "twitter4j-core" % "4.0.0",
     "com.typesafe.slick" %% "slick" % "2.1.0",
     "com.h2database" % "h2" % "1.4.186"
   )
@@ -59,4 +55,3 @@ pomExtra := (
         <name>ScalaConsultants</name>
       </developer>
     </developers>)
-
