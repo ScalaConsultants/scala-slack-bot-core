@@ -1,19 +1,35 @@
 package io.scalac.slack.bots
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.util.Timeout
 import io.scalac.slack.MessageEventBus
 import io.scalac.slack.common.{Incoming, MessageEvent, Outgoing, _}
 
+import scala.concurrent.ExecutionContext
 import scala.language.implicitConversions
 
 trait MessagePublisher {
 
+  import akka.pattern._
+
   def bus: MessageEventBus
+
 
   implicit def publish(event: MessageEvent): Unit = {
     bus.publish(event)
   }
 
+  def publish(directMessage: DirectMessage)(implicit context: ExecutionContext, userStorage: ActorRef, timeout: Timeout): Unit = {
+    userStorage ? FindChannel(directMessage.key) onSuccess {
+      case Some(channel: String) =>
+        val eventToSend = directMessage.event match {
+          case message: OutboundMessage => message.copy(channel = channel)
+          case message: RichOutboundMessage => message.copy(channel = channel)
+          case other => other
+        }
+        publish(eventToSend)
+    }
+  }
 }
 
 abstract class MessageListener extends Actor with ActorLogging with MessagePublisher
