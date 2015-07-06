@@ -1,11 +1,6 @@
 package io.scalac.slack.common
 
-import akka.actor.ActorRef
-import akka.pattern._
-import akka.util.Timeout
-
 import scala.annotation.tailrec
-import scala.concurrent.ExecutionContext
 
 /**
  * Created on 08.02.15 22:04
@@ -123,7 +118,6 @@ object Attachment {
 
 }
 
-
 /**
  * Classifier for message event
  */
@@ -141,18 +135,12 @@ object Outgoing extends MessageEventType
 case class MessageType(messageType: String, subType: Option[String])
 
 /**
- * Direct message is message send by the private channel
- * userStorage try to find channel ID and if will
- * message is translated into basic message and send to this channel.
+ * DirectMessage is sent directly to choosen user
+ * @param key user's name, Id or channelId
+ * @param event message to send, channel inside event will be overwritten
  */
-object DirectMessage extends {
+case class DirectMessage(key: String, event: MessageEvent)
 
-  def apply(key: String, message: String)(implicit context: ExecutionContext, userStorage: ActorRef, timeout: Timeout, forward: (OutboundMessage) => Unit): Unit = {
-
-    userStorage ? FindChannel(key) onSuccess {
-      case Some(channel: String) =>
-        forward(OutboundMessage(channel, message))
-    }
-
-  }
+object DirectMessage {
+  def apply(key: String, message: String): DirectMessage = DirectMessage(key, OutboundMessage("", message))
 }
