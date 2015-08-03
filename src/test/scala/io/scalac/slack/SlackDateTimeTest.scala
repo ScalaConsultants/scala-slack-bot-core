@@ -2,12 +2,12 @@ package io.scalac.slack
 
 import io.scalac.slack.common.{MessageCounter, SlackDateTime}
 import org.joda.time.{DateTimeZone, DateTime}
-import org.scalatest.{Matchers, WordSpecLike}
+import org.scalatest.{OneInstancePerTest, Matchers, WordSpecLike}
 
 /**
  * Created on 13.02.15 11:42
  */
-class SlackDateTimeTest extends Matchers with WordSpecLike {
+class SlackDateTimeTest extends Matchers with WordSpecLike with OneInstancePerTest {
 
   val baseDate = new DateTime(2015, 2, 15, 8, 23, 45, 0, DateTimeZone.UTC)
 
