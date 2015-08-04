@@ -17,7 +17,7 @@ class SlackBotActor(modules: BotModules, eventBus: MessageEventBus, master: Shut
 
   val api = context.actorOf(Props[ApiActor])
   val richProcessor = context.actorOf(Props(classOf[OutgoingRichMessageProcessor], api, eventBus))
-  val websocketClient = system.actorOf(Props(classOf[WSActor], eventBus), "ws-actor")
+  val websocketClient = context.actorOf(Props(classOf[WSActor], eventBus), "ws-actor")
 
   var errors = 0
 
