@@ -1,6 +1,6 @@
 name := "slack-scala-bot-core"
 
-version := "0.2.2"
+version := "0.2.3"
 
 scalaVersion := "2.11.6"
 
@@ -13,7 +13,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-    "io.spray" %% "spray-json" % "1.3.1",
+    "io.spray" %% "spray-json" % "1.3.2",
     "io.spray" %% "spray-client" % "1.3.1",
     "io.spray" %% "spray-can" % "1.3.2",
     "com.wandoulabs.akka" %% "spray-websocket" % "0.1.4",
