@@ -4,7 +4,7 @@
 
 # Purpose 
 
-Provide an easy integration with [Slack](link) instant messaging platform using Scala language in an easy to use Akka-like environment. This project provides the core functionality allowing one to connect, listen for messages and send messages to channels or as DMs. 
+Provide an easy integration with [Slack](https://slack.com/) instant messaging platform using Scala language in an easy to use Akka-like environment. This project provides the core functionality allowing one to connect, listen for messages and send messages to channels or as DMs. 
 
 ## What is it good for?
 
