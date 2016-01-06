@@ -8,7 +8,7 @@ import spray.json._
 object JsonProtocols extends DefaultJsonProtocol {
 
   implicit object AttachmentFormatWriter extends RootJsonWriter[Attachment] {
-    val attachmentFormat = jsonFormat7(Attachment.apply)
+    val attachmentFormat = jsonFormat8(Attachment.apply)
 
     override def write(a: Attachment): JsValue = {
       JsObject(JsObject("fallback" -> JsString("wrong formatted message")).fields ++ a.toJson(attachmentFormat).asJsObject.fields)
