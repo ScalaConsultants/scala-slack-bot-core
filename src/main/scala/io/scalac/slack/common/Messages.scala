@@ -81,7 +81,7 @@ case class ImageUrl(url: String) extends RichMessageElement
 
 case class RichOutboundMessage(channel: String, elements: List[Attachment]) extends MessageEvent
 
-case class Attachment(text: Option[String] = None, pretext: Option[String] = None, fields: Option[List[Field]] = None, title: Option[String] = None, title_link: Option[String] = None, color: Option[String] = None, image_url: Option[String] = None) {
+case class Attachment(text: Option[String] = None, pretext: Option[String] = None, fields: Option[List[Field]] = None, title: Option[String] = None, title_link: Option[String] = None, color: Option[String] = None, image_url: Option[String] = None, mrkdwn_in: Option[List[String]] = None) {
   def isValid = text.isDefined || pretext.isDefined || title.isDefined || (fields.isDefined && fields.get.nonEmpty)
 
   def addElement(element: RichMessageElement): Attachment = {
