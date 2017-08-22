@@ -21,7 +21,9 @@ class IncomingMessageProcessor(eventBus: MessageEventBus) extends Actor with Act
         val incomingMessage: IncomingMessage = mType match {
           case MessageType("hello", _) => Hello
           case MessageType("pong", _) => Pong
-          case MessageType("message", None) => s.parseJson.convertTo[BaseMessage]
+          case MessageType("message", _) => s.parseJson.convertTo[BaseMessage]
+          case MessageType("message", Some("message_replied")) =>
+            s.parseJson.convertTo[MessageThread]
           case _ =>
             UndefinedMessage(s)
         }

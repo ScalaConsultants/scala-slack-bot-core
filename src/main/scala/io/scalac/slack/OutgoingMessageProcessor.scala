@@ -18,6 +18,9 @@ class OutgoingMessageProcessor(wsActor: ActorRef, eventBus: MessageEventBus) ext
     case msg: OutboundMessage =>
       wsActor ! WebSocket.Send(msg.toJson)
 
+    case msg: ThreadedOutboundMessage =>
+      wsActor ! WebSocket.Send(msg.toJson)
+
     case ignored => //nothing else
 
   }
