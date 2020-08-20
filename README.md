@@ -5,3 +5,5 @@
 Akka based library for writing Slack bots in Scala. 
 
 For examples, description and ideas take a look at our [implementation](https://github.com/ScalaConsultants/scala-slack-bot) or blog [post](http://blog.scalac.io/2015/07/16/slack.html).
+
+Developed by [Scalac](https://scalac.io/?utm_source=scalac_github&utm_campaign=scalac1&utm_medium=web)
