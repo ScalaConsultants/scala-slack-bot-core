@@ -33,17 +33,17 @@ class UsersStorageTest(_system: ActorSystem) extends TestKit(_system) with Defau
     }
 
     "find user from storage" in {
-      val mario = SlackUser("1234", "mario", deleted = false, Some(false), None, None, None, None, None, None, Active)
-      val stefek = SlackUser("12345", "stefek", deleted = false, Some(false), None, None, None, None, None, None, Active)
+      val mario = SlackUser("U1234", "mario", deleted = false, Some(false), None, None, None, None, None, None, Active)
+      val stefek = SlackUser("U12345", "stefek", deleted = false, Some(false), None, None, None, None, None, None, Active)
       val us = system.actorOf(Props[UsersStorage])
 
       within(1 second) {
         us ! RegisterUsers(mario, stefek)
         expectMsg(Ok)
         us ! FindUser("mario")
-        expectMsg(Some(UserInfo("1234", "mario", Active)))
-        us ! FindUser("12345")
-        expectMsg(Some(UserInfo("12345", "stefek", Active)))
+        expectMsg(Some(UserInfo("U1234", "mario", Active)))
+        us ! FindUser("U12345")
+        expectMsg(Some(UserInfo("U12345", "stefek", Active)))
         us ! FindUser("gitara")
         expectMsg(None)
 

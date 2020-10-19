@@ -23,7 +23,7 @@ class UsersStorage extends Actor with ActorLogging {
 
     case FindUser(key) => sender ! userCatalog.find { user =>
       val matcher = key.trim.toLowerCase
-      matcher == user.id || matcher == user.name
+      matcher == user.id.toLowerCase || matcher == user.name.toLowerCase
     }
 
     case RegisterDirectChannels(channels@_*) =>
