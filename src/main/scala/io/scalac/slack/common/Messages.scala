@@ -24,7 +24,19 @@ case object Hello extends IncomingMessage
  * @param user ID of message author
  * @param ts unique timestamp
  */
-case class BaseMessage(text: String, channel: String, user: String, ts: String, edited: Boolean = false) extends IncomingMessage
+case class BaseMessage(text: String, channel: String, user: String, ts: String, thread_ts: Option[String] = None, edited: Boolean = false) extends IncomingMessage
+
+//Message thread
+case class MessageThread(message: Message, hidden: Boolean, channel: String, event_ts: String, ts: String) extends IncomingMessage
+
+//Message
+case class Message(user: String, text: String, thread_ts: String, reply_count: BigDecimal, replies: Replies, unread_count: BigDecimal, ts: String) extends IncomingMessage
+
+//Reply
+case class Reply(user: String, ts: String) extends IncomingMessage
+
+//Replies
+case class Replies(replies: Seq[Reply]) extends IncomingMessage
 
 //user issued command to bot
 case class Command(command: String, params: List[String], underlying: BaseMessage) extends IncomingMessage
@@ -53,12 +65,23 @@ case class OutboundMessage(channel: String, text: String) extends OutgoingMessag
   override def toJson =
     s"""{
        |"id": ${MessageCounter.next},
-                                      |"type": "message",
-                                      |"channel": "$channel",
-                                                             |"text": "$text"
-                                                                              |}""".stripMargin
+       |"type": "message",
+       |"channel": "$channel",
+       |"text": "$text"
+       |}""".stripMargin
 }
 
+//todo: Fold this into Outbound Message
+case class ThreadedOutboundMessage(channel: String, text: String, ts: String) extends OutgoingMessage {
+  override def toJson =
+    s"""{
+       |"id": ${MessageCounter.next},
+       |"type": "message",
+       |"channel": "$channel",
+       |"text": "$text",
+       |"thread_ts": "$ts"
+       |}""".stripMargin
+}
 sealed trait RichMessageElement
 
 case class Text(value: String) extends RichMessageElement
@@ -79,7 +102,7 @@ object Color {
 
 case class ImageUrl(url: String) extends RichMessageElement
 
-case class RichOutboundMessage(channel: String, elements: List[Attachment]) extends MessageEvent
+case class RichOutboundMessage(channel: String, elements: List[Attachment], ts: Option[String] = None) extends MessageEvent
 
 case class Attachment(text: Option[String] = None, pretext: Option[String] = None, fields: Option[List[Field]] = None, title: Option[String] = None, title_link: Option[String] = None, color: Option[String] = None, image_url: Option[String] = None) {
   def isValid = text.isDefined || pretext.isDefined || title.isDefined || (fields.isDefined && fields.get.nonEmpty)

@@ -718,5 +718,4 @@ class UnmarshallerTest extends FunSuite with Matchers {
     im.id should equal("D03DQKG1C")
     im.userId should equal("U03DN1GTQ")
   }
-
 }

@@ -10,7 +10,7 @@ class CommandsRecognizerBot(override val bus: MessageEventBus) extends IncomingM
 
   def receive: Receive = {
 
-    case bm@BaseMessage(text, channel, user, dateTime, edited) =>
+    case bm@BaseMessage(text, channel, user, dateTime, Some(thread_ts),edited) =>
       //COMMAND links list with bot's nam jack can be called:
       // jack link list
       // jack: link list
