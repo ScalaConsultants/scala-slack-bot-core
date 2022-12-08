@@ -13,8 +13,8 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-    "io.spray" %% "spray-json" % "1.3.1",
-    "io.spray" %% "spray-client" % "1.3.1",
+    "io.spray" %% "spray-json" % "1.3.6",
+    "io.spray" %% "spray-client" % "1.3.4",
     "io.spray" %% "spray-can" % "1.3.2",
     "com.wandoulabs.akka" %% "spray-websocket" % "0.1.4",
     "joda-time" % "joda-time" % "2.7",
@@ -28,7 +28,7 @@ libraryDependencies ++= {
   )
 }
 
-resolvers += "spray repo" at "http://repo.spray.io"
+resolvers += "spray repo" at "https://repo.spray.io"
 
 publishMavenStyle := true
 
