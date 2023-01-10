@@ -12,8 +12,11 @@ case object RegisterModules extends Message
 //API CALLS
 case class ApiTest(param: Option[String] = None, error: Option[String] = None) extends Message
 case class AuthTest(token: APIKey) extends Message
+
+@deprecated("Use RtmConnect instead")
 case class RtmStart(token: APIKey) extends Message
 
+case class RtmConnect(token: APIKey) extends Message
 //API RESPONSES
 case object Ok extends Message
 case object Connected extends Message

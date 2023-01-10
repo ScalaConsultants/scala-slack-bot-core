@@ -10,6 +10,9 @@ import scala.concurrent.Future
  */
 trait ApiClient {
 
-  def request[T <: ResponseObject](method: HttpMethod, endpoint: String, params: Map[String, String] = Map.empty[String, String])(implicit reader: JsonReader[T]): Future[T]
+  def request[T <: ResponseObject](method: HttpMethod,
+                                   endpoint: String,
+                                   queryParams: Map[String, String] = Map.empty,
+                                   token: Option[String])(implicit reader: JsonReader[T]): Future[T]
 
 }
