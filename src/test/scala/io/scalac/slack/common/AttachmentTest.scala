@@ -59,9 +59,8 @@ class AttachmentTest extends FunSuite with Matchers {
   test("attachment to JSON"){
     val att1 = Attachment(Text("sometext"), Field("title 1", "content 1", short = false), Field("title 2", "content 2", short = true), Color.danger)
     //language=JSON
-    val json = """{"fallback":"wrong formatted message","text":"sometext","fields":[{"title":"title 1","value":"content 1","short":false},{"title":"title 2","value":"content 2","short":true}],"color":"danger"}"""
-
-    json should equal (att1.toJson.toString())
+    val json = """{"color":"danger","fallback":"wrong formatted message","fields":[{"short":false,"title":"title 1","value":"content 1"},{"short":true,"title":"title 2","value":"content 2"}],"text":"sometext"}"""
+    (att1.toJson.toString()) shouldEqual json
 
   }
 
@@ -72,8 +71,8 @@ class AttachmentTest extends FunSuite with Matchers {
 
     val fieldJson = field.toJson.toString()
     //language=JSON
-    val json = """{"title":"field title","value":"field value","short":false}"""
-    json should equal (fieldJson)
+    val json = """{"short":false,"title":"field title","value":"field value"}"""
+   fieldJson shouldEqual json
   }
 
 }

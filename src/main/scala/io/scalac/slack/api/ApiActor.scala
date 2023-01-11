@@ -1,6 +1,6 @@
 package io.scalac.slack.api
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, PoisonPill}
 import io.scalac.slack.api.ResponseObject._
 import io.scalac.slack.common.JsonProtocols._
 import io.scalac.slack.common.RichOutboundMessage
@@ -38,7 +38,7 @@ class ApiActor extends Actor with ActorLogging {
       log.debug("auth.test requested")
       val send = sender()
 
-      SlackApiClient.get[AuthTestResponse]("auth.test", Map("token" -> token.key)) onComplete {
+      SlackApiClient.post[AuthTestResponse]("auth.test", token = Some(token.key)) onComplete {
         case Success(res) =>
 
           if (res.ok)
@@ -49,11 +49,11 @@ class ApiActor extends Actor with ActorLogging {
           send ! ex
       }
 
-    case RtmStart(token) =>
-      log.debug("rtm.start requested")
+    case RtmConnect(token) =>
+      log.debug("rtm.connect requested")
       val send = sender()
 
-      SlackApiClient.get[RtmStartResponse]("rtm.start", Map("token" -> token.key)) onComplete {
+      SlackApiClient.get[RtmConnectResponse]("rtm.connect", token = Some(token.key)) onComplete {
 
         case Success(res) =>
           if (res.ok) {
@@ -62,15 +62,16 @@ class ApiActor extends Actor with ActorLogging {
             send ! res
           }
         case Failure(ex) =>
+          println(ex)
           send ! ex
       }
     case msg: RichOutboundMessage =>
       log.debug("chat.postMessage requested")
 
       val attachments = msg.elements.filter(_.isValid).map(_.toJson).mkString("[", ",", "]")
-      val params = Map("token" -> Config.apiKey.key, "channel" -> msg.channel, "as_user" -> "true", "attachments" -> attachments)
+      val params = Map("channel" -> msg.channel, "as_user" -> "true", "attachments" -> attachments)
 
-      SlackApiClient.post[ChatPostMessageResponse]("chat.postMessage", params) onComplete {
+      SlackApiClient.post[ChatPostMessageResponse]("chat.postMessage", params, token = Some(Config.apiKey.key)) onComplete {
         case Success(res) =>
           if (res.ok) {
             log.info("[chat.postMessage]: message delivered: " + res.toString)

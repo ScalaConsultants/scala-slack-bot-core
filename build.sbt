@@ -1,22 +1,24 @@
 name := "slack-scala-bot-core"
 
-version := "0.2.1"
+version := "1.0.0"
 
 scalaVersion := "2.11.6"
 
 organization := "io.scalac"
 
 libraryDependencies ++= {
-  val akkaVersion = "2.3.9"
+  val akkaVersion = "2.5.23"
+  val akkaHttpVersion = "10.1.9"
   Seq(
     "org.mockito" % "mockito-core" % "1.10.19",
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-    "io.spray" %% "spray-json" % "1.3.6",
+    "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+  "io.spray" %% "spray-json" % "1.3.6",
     "io.spray" %% "spray-client" % "1.3.4",
     "io.spray" %% "spray-can" % "1.3.2",
-    "com.wandoulabs.akka" %% "spray-websocket" % "0.1.4",
     "joda-time" % "joda-time" % "2.7",
     "org.joda" % "joda-convert" % "1.7",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test",

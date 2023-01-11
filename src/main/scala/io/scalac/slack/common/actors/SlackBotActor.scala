@@ -1,10 +1,9 @@
 package io.scalac.slack.common.actors
 
 import java.util.concurrent.TimeUnit
-
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill, Props}
 import akka.util.Timeout
-import io.scalac.slack.api.{ApiActor, ApiTest, AuthData, AuthTest, BotInfo, Connected, RegisterModules, RtmData, RtmStart, RtmStartResponse, Start, Stop}
+import io.scalac.slack.api.{ApiActor, ApiTest, AuthData, AuthTest, BotInfo, Connected, RegisterModules, RtmConnect, RtmConnectResponse, RtmData, RtmStart, RtmStartResponse, Start, Stop}
 import io.scalac.slack.common.{BotInfoKeeper, RegisterDirectChannels, RegisterUsers, Shutdownable}
 import io.scalac.slack.websockets.{WSActor, WebSocket}
 import io.scalac.slack.{BotModules, Config, MessageEventBus, MigrationInProgress, OutgoingRichMessageProcessor, SlackError}
@@ -35,7 +34,7 @@ class SlackBotActor(modules: BotModules, eventBus: MessageEventBus, master: Shut
     case ad: AuthData =>
       log.info("authenticated successfully")
       log.info("request for websocket connection...")
-      api ! RtmStart(Config.apiKey)
+      api ! RtmConnect(Config.apiKey)
     case RtmData(url) =>
       log.info("fetched WSS URL")
       log.info(url)
@@ -48,7 +47,7 @@ class SlackBotActor(modules: BotModules, eventBus: MessageEventBus, master: Shut
 
       log.info(s"Connecting to host [$host] and resource [$resource]")
 
-      websocketClient ! WebSocket.Connect(host, 443, resource, withSsl = true)
+      websocketClient ! WebSocket.Connect(url)
 
       context.system.scheduler.scheduleOnce(Duration.create(5, TimeUnit.SECONDS), self, RegisterModules)
 
@@ -67,16 +66,24 @@ class SlackBotActor(modules: BotModules, eventBus: MessageEventBus, master: Shut
     case se: SlackError =>
       log.error(s"SlackError occured [${se.toString}]")
       master.shutdown()
-    case res: RtmStartResponse =>
-      if(usersStorageOpt.isDefined) {
-        val userStorage = usersStorageOpt.get
-
-        userStorage ! RegisterUsers(res.users: _*)
-        userStorage ! RegisterDirectChannels(res.ims: _*)
-      }
+    case res: RtmConnectResponse =>
+//      if(usersStorageOpt.isDefined) {
+//        val userStorage = usersStorageOpt.get
+//
+//        userStorage ! RegisterUsers(res.users: _*)
+//        userStorage ! RegisterDirectChannels(res.ims: _*)
+//      }
 
     case WebSocket.Release =>
       websocketClient ! WebSocket.Release
+
+    case ex: Exception =>
+      log.error("Received exception", ex)
+      self ! PoisonPill
+
+    case other =>
+      println("what is this?")
+      println(other)
 
   }
 
